@@ -17,7 +17,6 @@ const App: React.FC = () => {
         setTime((time) => time - 1);
       }, 1000);
     } else if (time === 0) {
-      setIsActive(false);
       handleModeChange();
     }
 
