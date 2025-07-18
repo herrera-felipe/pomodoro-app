@@ -29,8 +29,35 @@ const App: React.FC = () => {
   }, [isActive, time]);
 
   useEffect(() => {
-    document.body.style.backgroundColor = 
-      mode === 'work' ? '#282c34' : mode === 'shortBreak' ? '#3a5a40' : '#588157';
+    const root = document.documentElement;
+    let bgColor, btnBgColor, btnBorderColor;
+
+    switch (mode) {
+      case 'work':
+        bgColor = 'radial-gradient(circle, #6c33d6, #531CB3)';
+        btnBgColor = '#531CB3';
+        btnBorderColor = '#ffffff';
+        break;
+      case 'shortBreak':
+        bgColor = 'radial-gradient(circle, #a966cc, #944BBB)';
+        btnBgColor = '#944BBB';
+        btnBorderColor = '#ffffff';
+        break;
+      case 'longBreak':
+        bgColor = 'radial-gradient(circle, #bfa0d4, #AA7BC3)';
+        btnBgColor = '#AA7BC3';
+        btnBorderColor = '#ffffff';
+        break;
+      default:
+        bgColor = 'radial-gradient(circle, #6c33d6, #531CB3)';
+        btnBgColor = '#531CB3';
+        btnBorderColor = '#ffffff';
+    }
+
+    document.body.style.background = bgColor;
+    root.style.setProperty('--button-bg-color', btnBgColor);
+    root.style.setProperty('--button-border-color', btnBorderColor);
+
   }, [mode]);
 
   const handleModeChange = () => {
