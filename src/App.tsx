@@ -1,22 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Timer from './components/Timer';
 import Controls from './components/Controls';
 import ModeSelector from './components/ModeSelector';
+import notificationSound from './assets/notification.mp3';
 
 const App: React.FC = () => {
   const [mode, setMode] = useState('work');
   const [time, setTime] = useState(25 * 60);
   const [isActive, setIsActive] = useState(false);
   const [pomodoroCount, setPomodoroCount] = useState(0);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const playSound = async () => {
+    if (audioRef.current) {
+      try {
+        audioRef.current.currentTime = 0;
+        await audioRef.current.play();
+      } catch (error) {
+        console.error("Error playing audio:", error);
+      }
+    }
+  };
 
   useEffect(() => {
-        let interval: ReturnType<typeof setInterval> | undefined;
+    let interval: ReturnType<typeof setInterval> | undefined;
 
     if (isActive && time > 0) {
       interval = setInterval(() => {
         setTime((time) => time - 1);
       }, 1000);
     } else if (time === 0) {
+      playSound();
       handleModeChange();
     }
 
@@ -76,6 +90,9 @@ const App: React.FC = () => {
   };
 
   const toggleTimer = () => {
+    if (!isActive) {
+      playSound();
+    }
     setIsActive(!isActive);
   };
 
@@ -110,6 +127,7 @@ const App: React.FC = () => {
       <ModeSelector selectMode={selectMode} />
       <Timer time={time} />
       <Controls toggleTimer={toggleTimer} resetTimer={resetTimer} isActive={isActive} />
+      <audio ref={audioRef} src={notificationSound} />
     </div>
   );
 };
