@@ -42,35 +42,7 @@ const App: React.FC = () => {
   }, [isActive, time]);
 
   useEffect(() => {
-    const root = document.documentElement;
-    let bgColor, btnBgColor, btnBorderColor;
-
-    switch (mode) {
-      case 'work':
-        bgColor = 'radial-gradient(circle, #6c33d6, #531CB3)';
-        btnBgColor = '#531CB3';
-        btnBorderColor = '#ffffff';
-        break;
-      case 'shortBreak':
-        bgColor = 'radial-gradient(circle, #a966cc, #944BBB)';
-        btnBgColor = '#944BBB';
-        btnBorderColor = '#ffffff';
-        break;
-      case 'longBreak':
-        bgColor = 'radial-gradient(circle, #bfa0d4, #AA7BC3)';
-        btnBgColor = '#AA7BC3';
-        btnBorderColor = '#ffffff';
-        break;
-      default:
-        bgColor = 'radial-gradient(circle, #6c33d6, #531CB3)';
-        btnBgColor = '#531CB3';
-        btnBorderColor = '#ffffff';
-    }
-
-    document.body.style.background = bgColor;
-    root.style.setProperty('--button-bg-color', btnBgColor);
-    root.style.setProperty('--button-border-color', btnBorderColor);
-
+    document.body.className = `${mode}-mode`;
   }, [mode]);
 
   const handleModeChange = () => {
@@ -123,9 +95,11 @@ const App: React.FC = () => {
 
   return (
     <div className="app">
-      <h1>Pomodoro Timer</h1>
-      <ModeSelector selectMode={selectMode} />
+      <h1>Rune of Focus</h1>
+      <ModeSelector selectMode={selectMode} currentMode={mode} />
+      <div className="divider"></div>
       <Timer time={time} />
+      <div className="divider"></div>
       <Controls toggleTimer={toggleTimer} resetTimer={resetTimer} isActive={isActive} />
       <audio ref={audioRef} src={notificationSound} />
     </div>
